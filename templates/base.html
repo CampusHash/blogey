@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>{{ title }} &raquo; Blogey</title>
+		<meta charset="utf-8">
+		<meta name="author" content="Sanket Saurav">
+		<meta name="description" content="Blogey, a friendly blog.">
+		<link rel="stylesheet" href="/static/css/style.css">
+	</head>
+
+	<body>
+		<div class="container">
+			<header>
+				<span class="greeting">Welcome, {{ user.username or 'Guest' }}!</span>
+				<nav>
+					<ul>
+						<li><a href="/">Home</a></li>
+						{% if user %}
+						<li><a href="/newpost">New Post</a></li>
+						<li><a href="/logout">Logout</a></li>
+						{% else %}
+						<li><a href="/login">Login</a></li>
+						<li><a href="/signup">Signup</a></li>
+						{% endif %}
+					</ul>
+				</nav>
+			</header>
+			{% if error %}
+			<section class="error">
+				{{error}}
+			</section>
+			{% endif %}
+			{% if success %}
+			<section class="success">
+				{{success}}
+			</section>
+			{% endif %}
+			<section class="content">
+				{% block content %}
+				{% endblock content %}
+			</section>
+		</div>
+	</body>
+
+</html>

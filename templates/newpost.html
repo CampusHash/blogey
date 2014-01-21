@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% set title='Add a new post' %}
+
+{% block content %}
+	<form method="POST" action="/newpost">
+		<legend class="title">Add new post</legend>
+		<label for="title">
+			Title
+			<input type="text" name="title" required>
+		</label>
+		<label for="content">
+			Content
+			<textarea name="content" cols="40" rows="10"></textarea>
+		</label>
+		<label for="submit">
+			<input type="submit" value="Publish">
+		</label>
+	</form>
+{% endblock content %}

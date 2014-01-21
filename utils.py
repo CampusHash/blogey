@@ -1,3 +1,4 @@
+import hashlib
 import hmac
 import re
 
@@ -58,3 +59,22 @@ def is_email_valid(email):
 	"""
 
 	return email and EMAIL_RE.match(email)
+
+def encrypt(password):
+	"""
+	Encrypt the password with SHA256
+	"""
+
+	return hashlib.sha256(password).hexdigest()
+
+class UserError(Exception):
+	pass
+
+class ValidationError(Exception):
+	pass
+
+class InvalidCredentialsError(Exception):
+	pass
+
+class AuthenticationError(Exception):
+	pass
