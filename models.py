@@ -73,7 +73,7 @@ class Post(ndb.Model):
 		Returns the most recent 10 blog posts
 		"""
 		
-		top_posts = cls.query().fetch(10)
+		top_posts = cls.query().order(-cls.created).fetch(10)
 		return list(top_posts)
 
 	@classmethod

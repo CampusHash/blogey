@@ -53,14 +53,6 @@ ul li{
 	margin: 40px auto;
 }
 
-.content {
-
-}
-
-.post {
-
-}
-
 .no-post {
 	text-align: center;
 	font-weight: 700;
@@ -149,4 +141,11 @@ form {
 	padding: 25px 25px;
 	border: #BDC3C7 solid 2px;
 	border-radius: 10px;
+}
+
+.author {
+	font-weight: 400;
+	text-transform: uppercase;
+	font-size: 18px;
+	color: #BDC3C7;
 }
