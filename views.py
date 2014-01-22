@@ -17,13 +17,6 @@ class BaseHandler(webapp2.RequestHandler):
 
 		self.response.out.write(render_str(template, **kw))
 
-	def write(self, *a, **kw):
-		"""
-		Write a string to the response
-		"""
-
-		self.response.out.write(*a, **kw)
-
 	def set_secure_cookie(self, name, val):
 		"""
 		Set an encrypted cookie on client's machine
@@ -65,7 +58,7 @@ class Home(BaseHandler):
 
 		top_posts = Post.top_posts()
 
-		self.render("home.html", posts=top_posts, user=self.user)
+		self.render("home.html", posts=top_posts, user=self.user, permalink=False)
 
 class Permalink(BaseHandler):
 	"""
@@ -80,7 +73,7 @@ class Permalink(BaseHandler):
 
 		post = Post.get_by_id(int(post_id))
 		if post:
-			self.render("home.html", user=self.user, posts=[post])
+			self.render("home.html", user=self.user, posts=[post], permalink=True)
 		else:
 			self.abort(404)
 
