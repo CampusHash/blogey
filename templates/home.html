@@ -7,7 +7,7 @@
 	<article>
 		<section>
 			<a href="/post/{{post.key.id()}}" class="title">{{post.title | safe}}</a>
-			<h2 class="author">by <strong>{{post.author.get().username}}</strong> on {{post.created.strftime('%d %b, %Y')}}</h2>
+			<h2 class="author">by <strong>{{post.author.nickname()}}</strong> on {{post.created.strftime('%d %b, %Y')}}</h2>
 		</section>
 		{% if permalink %}
 			<p class="post-content">{{post.content.replace('\n', '<br>') | safe}}</p>

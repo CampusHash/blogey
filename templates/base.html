@@ -13,7 +13,9 @@
 	<body>
 		<div class="container">
 			<header>
-				<span class="greeting">Welcome, {{ user.username or 'Guest' }}!</span>
+				<span class="greeting">
+					Welcome, {% if user %}{{user.nickname()}}{% else %}Guest{% endif %}!
+				</span>
 				<nav>
 					<ul>
 						<li><a href="/">Home</a></li>

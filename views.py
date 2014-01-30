@@ -1,8 +1,9 @@
 import webapp2
 
-from utils import *
+from google.appengine.api import users
 
-from models import User, Post
+from utils import *
+from models import Post
 
 class BaseHandler(webapp2.RequestHandler):
 	"""
@@ -17,25 +18,6 @@ class BaseHandler(webapp2.RequestHandler):
 
 		self.response.out.write(render_str(template, **kw))
 
-	def set_secure_cookie(self, name, val):
-		"""
-		Set an encrypted cookie on client's machine
-		"""
-
-		cookie_val = make_secure_val(val)
-		self.response.headers.add_header(
-			'Set-Cookie',
-			'%s=%s; Path=/' % (name, cookie_val)
-			)
-
-	def read_secure_cookie(self, name):
-		"""
-		Read a cookie and check it's integrity
-		"""
-
-		cookie_val = self.request.cookies.get(name)
-		return cookie_val and check_secure_val(cookie_val)
-
 	def initialize(self, *a, **kw):
 		"""
 		Override the constuctor for adding user information
@@ -43,8 +25,7 @@ class BaseHandler(webapp2.RequestHandler):
 		"""
 
 		webapp2.RequestHandler.initialize(self, *a, **kw)
-		user_id = self.read_secure_cookie('user')
-		self.user = user_id and User.get_by_id(int(user_id))
+		self.user = users.get_current_user()
 
 class Home(BaseHandler):
 	"""
@@ -87,29 +68,10 @@ class Login(BaseHandler):
 		For a GET request, render the login page
 		"""
 
-		user = self.user
-
-		if user:
+		if self.user:
 			self.redirect('/')
-
-		self.render('login.html', user=user)
-
-	def post(self):
-		"""
-		For a POST request, perform the login. If successful, redirect
-		to homepage
-		"""
-
-		username = self.request.get('username')
-		password = self.request.get('password')
-
-		try:
-			user_id = User.authenticate(username, password)
-			self.set_secure_cookie('user', str(user_id))
-			self.redirect('/')
-		
-		except Exception, e:
-			self.render("login.html", user=self.user, error = e)
+		else:
+			self.redirect(users.create_login_url('/'))
 
 class Logout(BaseHandler):
 	"""
@@ -120,42 +82,8 @@ class Logout(BaseHandler):
 		"""
 		Log out the user and redirect her to homepage
 		"""
-		
-		self.set_secure_cookie('user', '')
-		self.redirect('/')
 
-class Signup(BaseHandler):
-	"""
-	Signup a new user
-	"""
-
-	def get(self):
-		"""
-		Render the signup page
-		"""
-
-		user = self.user
-
-		if user:
-			self.redirect('/')
-
-		self.render('signup.html', user=user)
-
-	def post(self):
-		"""
-		Create a new user, and redirect to homepage
-		"""
-
-		username = self.request.get('username')
-		password = self.request.get('password')
-
-		try:
-			user = User.create_user(username, password)
-			self.render('login.html',
-						success="Great! You are registered! Please log in.", user=user)
-
-		except Exception, e:
-			self.render('signup.html', error=e, user=self.user)
+		self.redirect(users.create_logout_url('/'))
 
 class NewPost(BaseHandler):
 	"""
